@@ -1,0 +1,32 @@
+{
+  "name": "midilistener.service",
+  "version": "0.2.5",
+  "description": "MIDI listener service",
+  "author": "AY <a@qx.zone>",
+  "license": "GPL-3.0-or-later",
+  "git": "https://github.com/alexrster/midi-listener-service",
+  "repository": "https://github.com/alexrster/midi-listener-service",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "midi",
+    "mic"
+  ],
+  "devDependencies": {
+    "mocha": "^8.1.3",
+    "mochawesome": "^6.1.1"
+  },
+  "dependencies": {
+    "applicationinsights": "^1.8.8",
+    "easymidi": "^2.0.1",
+    "events": "^3.2.0",
+    "execa": "^4.0.3",
+    "fast-xml-parser": "^3.17.4",
+    "he": "^1.2.0",
+    "moment": "^2.29.1",
+    "mqtt": "^4.2.1",
+    "util": "^0.12.3"
+  }
+}
