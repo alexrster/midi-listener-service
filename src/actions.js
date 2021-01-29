@@ -79,6 +79,7 @@ let converters = {
       return defaultVal;
     }
   },
+  str2num: function() { return x => Number(x) },
   num2bool: function() { return x => !!x && Number(x) > 0 },
   multiply: function(num = 1) { return x => x * num },
   exp: function(max) { return x => ((Math.sin(x * Math.PI/max - Math.PI/2) + 1) / 2) * max }, // [0..max] to be converted to [0..1] range and then back to [0..max]

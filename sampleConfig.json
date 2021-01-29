@@ -1,16 +1,46 @@
 {
-  "popup": false,
-  "midi": true,
-  "trayBlinking": true,
-  "led": false,
-  "mqtt": true,
-  "mqttUrl": "tcp://10.9.9.96:1883",
+  "modules": [
+    {
+      "path": "./mods/wled",
+      "config": {
+        "wleds": [
+          {
+            "name": "wled-05",
+            "address": "http://10.9.9.124"
+          },
+          {
+            "name": "wled-04",
+            "address": "http://10.9.9.117"
+          }
+        ]
+      }
+    },
+    {
+      "path": "./mods/lpd8",
+      "config": {
+        "deviceName": "LPD8"
+      }
+    },
+    {
+      "path": "./mods/mic"
+    },
+    {
+      "path": "./mods/mqttNotifier",
+      "mqttUrl": "tcp://10.9.9.96:1883"
+    }
+  ],
   "eventBindings": [
     {
       "type": "mqtt",
-      "topic": "ay-mbpro/mic/set",
+      "topic": "ay-macmini/mic/set",
       "action": "mic.set",
       "converter": "str2bool()"
+    },
+    {
+      "type": "lpd8",
+      "knob": "k1",
+      "action": "mic.setLevel",
+      "converter": "str2num()"
     },
     {
       "type": "mqtt",
@@ -34,6 +64,14 @@
     },
     {
       "type": "lpd8",
+      "button": "p5",
+      "action": "mqtt.topic('ay-macmini/mic/set').send",
+      "converter": "valueOf('ay-macmini/mic/set')",
+      "expr": "!x",
+      "state": "ay-macmini/mic/set"
+    },
+    {
+      "type": "lpd8",
       "button": "p2",
       "action": "mqtt.topic('balcony/heater/top/set').send",
       "converter": "valueOf('heater_top')",
@@ -47,6 +85,21 @@
       "converter": "valueOf('heater_bottom')",
       "expr": "!x",
       "state": "heater_bottom"
+    },
+    {
+      "type": "mqtt",
+      "topic": "balcony/ventilation",
+      "action": "lpd8.pad('p4').setBlinking",
+      "converter": "str2bool()",
+      "state": "ventilation"
+    },
+    {
+      "type": "lpd8",
+      "button": "p4",
+      "action": "mqtt.topic('balcony/ventilation/set').send",
+      "converter": "valueOf('ventilation')",
+      "expr": "!x",
+      "state": "ventilation"
     },
     {
       "type": "mqtt",
@@ -125,23 +178,6 @@
       "button": "p7",
       "expr": "JSON.parse('{\"seg\":[{\"on\":true,\"sel\":true,\"pal\":2,\"col\":[['+Math.ceil(Math.random()*255)+','+Math.ceil(Math.random()*255)+','+Math.ceil(Math.random()*255)+']]}]}')",
       "action": "wled('wled-05').sendJson"
-    }
-  ],
-  "modules": [
-    {
-      "path": "./mods/wled",
-      "config": {
-        "wleds": [
-          {
-            "name": "wled-05",
-            "address": "http://10.9.9.124"
-          },
-          {
-            "name": "wled-04",
-            "address": "http://10.9.9.117"
-          }
-        ]
-      }
     }
   ]
 }

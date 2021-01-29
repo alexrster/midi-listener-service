@@ -61,6 +61,21 @@ try {
   desiredVolume = 100
 }
 
+function initOpts(opts) {
+}
+
+function initModActions(actions) {
+  actions.mic = {
+    set: v => v ? unmuteMic() : muteMic(),
+    setLevel: v => setDesiredVolume(v)
+  }
+}
+
+function initEventBindings(eventBindings, actions) {
+}
+
+function modUnloader() { }
+
 exports.mic = {
   mute: muteMic,
   unmute: unmuteMic,
@@ -70,4 +85,12 @@ exports.mic = {
   onMuted: function(listener) { return eventEmitter.on('muted', listener) },
   onUnmuted: function(listener) { return eventEmitter.on('unmuted', listener) },
   onVolumeChanged: function(listener) { return eventEmitter.on('volume-changed', listener) }
+}
+
+exports.modLoader = function(opts, config, actions) {
+  initOpts((opts || {}));
+  initModActions(actions);
+  initEventBindings(config.eventBindings, actions);
+
+  return () => modUnloader(opts, config, actions);
 }

@@ -86,4 +86,39 @@ var MqttNotifier = function() {
 
 MqttNotifier.prototype = Object.create(EventEmitter.prototype);
 
+var mqttUrl = "tcp://10.9.9.96:1883"
+var mqttNotifier = new MqttNotifier()
+
+function initOpts(opts) {
+  if (!!opts.mqttUrl) mqttUrl = opts.mqttUrl
+}
+
+function initModActions(actions) {
+  actions.mqtt = {
+    topic: function (topicName) {
+      return {
+        send: message => mqttNotifier.notify(topicName, String(message))
+      }
+    }
+  }
+}
+
+function initEventBindings(eventBindings, actions) {
+  if (!!eventBindings) eventBindings.forEach(v => { 
+    if (v.type === 'mqtt') mqttNotifier.on(v.topic, actions.getActionHandler(v))
+  })
+
+  mqttNotifier.connect(mqttUrl)
+}
+
+function modUnloader() { }
+
 exports.MqttNotifier = MqttNotifier
+
+exports.modLoader = function(opts, config, actions) {
+  initOpts((opts || {}));
+  initModActions(actions);
+  initEventBindings(config.eventBindings, actions);
+
+  return () => modUnloader(opts, config, actions);
+}

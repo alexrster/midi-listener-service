@@ -183,7 +183,7 @@ function initModActions(actions) {
   }
 }
 
-function initEventBindings(eventBindings) {
+function initEventBindings(eventBindings, actions) {
   eventBindings.forEach(v => {
     if (v.type === 'wled' && !!v.name) {
       if (!wleds[v.name]) wleds[v.name] = new wled({name: v.name});
@@ -200,7 +200,7 @@ function modUnloader(opts, config, actions) {}
 function modLoader(opts, config, actions) {
   initOpts((opts || {}));
   initModActions(actions);
-  initEventBindings(config.eventBindings);
+  initEventBindings(config.eventBindings, actions);
 
   return () => modUnloader(opts, config, actions);
 }

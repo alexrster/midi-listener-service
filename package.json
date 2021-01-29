@@ -15,6 +15,7 @@
     "mic"
   ],
   "devDependencies": {
+    "jshint": "^2.12.0",
     "mocha": "^8.1.3",
     "mochawesome": "^6.1.1"
   },
@@ -23,10 +24,13 @@
     "easymidi": "^2.0.1",
     "events": "^3.2.0",
     "execa": "^4.0.3",
+    "express": "^4.17.1",
     "fast-xml-parser": "^3.17.4",
+    "fs": "^0.0.1-security",
     "he": "^1.2.0",
     "moment": "^2.29.1",
     "mqtt": "^4.2.1",
+    "request": "^2.88.2",
     "util": "^0.12.3"
   }
 }

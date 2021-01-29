@@ -130,12 +130,70 @@ var LPD8 = function (name = 'LPD8', virtual = false) {
   }
 }
 
+function initOpts(opts) {
+  if (!!opts.deviceName) {
+    return new LPD8(opts.deviceName, !!opts.virtual);
+  }
+}
+
+function initModActions(lpd8, actions) {
+  actions.lpd8 = {
+    pad: function (padName) {
+      return {
+        set: v => v ? lpd8.getPad(padName).setOn() : lpd8.getPad(padName).setOff(),
+        setBlinking: v => v ? lpd8.getPad(padName).setBlinking() : lpd8.getPad(padName).setOff()
+      }
+    }
+  }
+}
+
+function initEventBindings(lpd8, eventBindings, actions) {
+  eventBindings.forEach(v => {
+    if (v.type === 'lpd8') {
+      if (!!v.pad) {
+        const p = lpd8.getPad(v.pad)
+        p.onOn(() => (actions.getActionHandler(v))(true))
+        p.onOff(() => (actions.getActionHandler(v))(false))
+      }
+      else if (!!v.button) {
+        const p = lpd8.getPad(v.button)
+        var btnTimeout = 0
+        var handler = function() { 
+          (actions.getActionHandler(v))(true);
+
+          if (btnTimeout) clearTimeout(btnTimeout);
+          btnTimeout = setTimeout(() => { p.setOff(); btnTimeout = 0; }, 100); 
+        }
+
+        p.onOn(handler)
+        p.onOff(() => {
+          p.setOn()
+          handler() 
+        })
+      }
+      if (!!v.knob) {
+        lpd8.getKnob(v.knob).onChange(val => (actions.getActionHandler(v))(val))
+      }
+    }
+  })
+}
+
+function modUnloader() { }
+
+exports.modLoader = function(opts, config, actions) {
+  var lpd8 = initOpts((opts || {}));
+  initModActions(lpd8, actions);
+  initEventBindings(lpd8, config.eventBindings, actions);
+
+  return () => modUnloader(lpd8, opts, config, actions);
+}
+
 exports.LPD8 = function(name = 'LPD8', virtual = false) {
   try {
-    return new LPD8(name, virtual)
+    return new LPD8(name, virtual);
   } catch (err) {
     console.warn(err);
   }
 
-  return null
+  return null;
 }
