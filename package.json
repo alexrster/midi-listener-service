@@ -25,7 +25,7 @@
     "events": "^3.2.0",
     "execa": "^4.0.3",
     "express": "^4.17.1",
-    "fast-xml-parser": "^3.17.4",
+    "fast-xml-parser": "^3.19.0",
     "fs": "^0.0.1-security",
     "he": "^1.2.0",
     "moment": "^2.29.1",
