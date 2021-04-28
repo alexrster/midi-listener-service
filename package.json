@@ -20,7 +20,7 @@
     "mochawesome": "^6.1.1"
   },
   "dependencies": {
-    "applicationinsights": "^1.8.8",
+    "applicationinsights": "^1.8.10",
     "easymidi": "^2.0.1",
     "events": "^3.2.0",
     "execa": "^4.0.3",
